@@ -1,0 +1,45 @@
+import requests
+import time
+
+# Установите базовый URL для получения информации о мемпуле
+base_url = 'https://api.mempool.space'
+
+# Функция для получения транзакций с мемпула
+def get_pending_transactions():
+    url = base_url + '/v1/fees/mempool-blocks'
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        transactions = data['blocks'][0]['txids']
+        return transactions
+    else:
+        return []
+
+# Функция для проверки и обработки транзакции
+def process_transaction(transaction):
+    # Добавьте здесь код для проверки и обработки транзакции
+    # Например, можно анализировать входящие и исходящие адреса, сумму, газ и т.д.
+    # Если транзакция соответствует вашим критериям, выполните нужные действия
+
+    print(f'Processing transaction: {transaction}')
+
+# Главный цикл работы бота
+def main_loop():
+    while True:
+        try:
+            # Получение списка транзакций с мемпула
+            transactions = get_pending_transactions()
+
+            # Обработка каждой транзакции
+            for transaction in transactions:
+                process_transaction(transaction)
+
+            # Задержка между проверками мемпула
+            time.sleep(5)  # Можно настроить интервал задержки
+        except Exception as e:
+            print(f'An error occurred: {e}')
+            continue
+
+# Запуск бота
+if __name__ == '__main__':
+    main_loop()
